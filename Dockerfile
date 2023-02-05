@@ -1,2 +1,2 @@
 FROM openjdk:11-jre
-USER root
+COPY target/spring-petclinic-2.7.3.jar spring-petclinic.jar
