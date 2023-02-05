@@ -1,4 +1,4 @@
-FROM openjdk:11-jre
+FROM adoptopenjdk/openjdk11
 RUN mkdir -p /app
 WORKDIR /app
 ADD target/spring-petclinic-2.7.3.jar /app/spring-petclinic.jar
