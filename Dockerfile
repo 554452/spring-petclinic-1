@@ -1,6 +1,5 @@
 FROM adoptopenjdk/openjdk11
-RUN mkdir -p /app
-WORKDIR /app
-ADD target/spring-petclinic-2.7.3.jar /app/spring-petclinic.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "spring-petclinic.jar"]
+CMD ["./mvnw", "clean", "package"]
+ARG JAR_FILE_PATH=target/*.jar
+COPY ${JAR_FILE_PATH} app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
