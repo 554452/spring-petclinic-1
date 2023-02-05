@@ -1,3 +1,6 @@
 FROM openjdk:11-jre
-COPY target/*.jar app.jar
+RUN rm -rf app
+RUN mkdir -p app
+WORKDIR app
+ADD target/*.jar app/app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
