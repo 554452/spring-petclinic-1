@@ -12,7 +12,7 @@ pipeline {
       booleanParam(name : 'DEPLOY_WORKLOAD', defaultValue : true, description : 'DEPLOY_WORKLOAD')
 
       // CI
-      string(name : 'AWS_ACCOUNT_ID', defaultValue : '257307634175', description : 'AWS_ACCOUNT_ID')
+      string(name : 'AWSCredentials', defaultValue : '257307634175', description : 'AWS_ACCOUNT_ID')
       string(name : 'DOCKER_IMAGE_NAME', defaultValue : 'spring-petclinic', description : 'DOCKER_IMAGE_NAME')
       string(name : 'DOCKER_TAG', defaultValue : '1.0', description : 'DOCKER_TAG')
 
