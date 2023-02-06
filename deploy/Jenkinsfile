@@ -57,7 +57,7 @@ pipeline {
                 makeEmptyDirs: false, 
                 noDefaultExcludes: false, 
                 patternSeparator: '[, ]+', 
-                remoteDirectory: '/home/ubuntu/deploy', 
+                remoteDirectory: '', 
                 remoteDirectorySDF: false, 
                 removePrefix: 'target', 
                 sourceFiles: 'target/*.jar')], 
