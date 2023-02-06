@@ -25,7 +25,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build'
-            }            
+                sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
         }
         stage('Docker Image') {
             steps {
