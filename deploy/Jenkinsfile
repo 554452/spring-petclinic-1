@@ -43,9 +43,9 @@ pipeline {
                 echo 'Docker Push'
             }            
         }
-        stage('Target Build') {
+        stage('Target Deploy') {
             steps {
-                echo 'Target Build'                
+                echo 'Target Deploy'                
             }            
         }
 
