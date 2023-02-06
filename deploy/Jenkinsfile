@@ -43,9 +43,26 @@ pipeline {
                 echo 'Docker Push'
             }            
         }
-        stage('Target Pull') {
+        stage('Target CD') {
             steps {
-                echo 'Target Pull'
+                echo 'Target CD'
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
+                transfers: [sshTransfer(cleanRemote: false, excludes: '', 
+                execCommand: '''
+                fuser -k 8080/tcp
+                export BUILD_ID=PetClinic
+                nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
+                execTimeout: 120000, 
+                flatten: false, 
+                makeEmptyDirs: false, 
+                noDefaultExcludes: false, 
+                patternSeparator: '[, ]+', 
+                remoteDirectory: '', 
+                remoteDirectorySDF: false, 
+                removePrefix: 'target', 
+                sourceFiles: 'target/*.jar')], 
+                usePromotionTimestamp: false, 
+                useWorkspaceInPromotion: false, verbose: false)])
             }            
         }
 
