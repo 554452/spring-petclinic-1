@@ -32,7 +32,7 @@ pipeline {
             steps {
                 echo 'Docker Image Build'
                 dir("${env.WORKSPACE}") {
-                    sh 'docker build -t ${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG} .'
+                    sh 'docker build -t std00-spring-petclinic:${ECR_DOCKER_TAG} .'
                 }
             }
         }
