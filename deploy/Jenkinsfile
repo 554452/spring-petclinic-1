@@ -6,6 +6,14 @@ pipeline {
         jdk 'JDK11'
     }
     
+    environment {
+        AWS_CREDENTIAL_NAME = "awsEcrCredentials"
+        REGION = "ap-northeast-2"
+        ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
+        ECR_DOCKER_IMAGE = "std00-spring-petclinic/spring-petclinic"
+        ECR_DOCKER_TAG = "1.0"
+    }
+    
     stages {
         stage('Git init') {
             steps {
@@ -24,34 +32,26 @@ pipeline {
             steps {
                 echo 'Docker Image Build'
                 dir("${env.WORKSPACE}") {
-                    sh 'docker build -t spring-petclinic:1.0 .'
+                    sh 'docker build -t ${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG} .'
                 }
             }
         }
-            
-            
-        
-        stage('Deploy') {
+        stage ('Docker Image Push') {
             steps {
-                echo 'Deploy'
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
-                transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-                execCommand: '''
-                fuser -k 8080/tcp
-                export BUILD_ID=PetClinic
-                nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
-                execTimeout: 120000, 
-                flatten: false, 
-                makeEmptyDirs: false, 
-                noDefaultExcludes: false, 
-                patternSeparator: '[, ]+', 
-                remoteDirectory: 'deploy', 
-                remoteDirectorySDF: false, 
-                removePrefix: 'target', 
-                sourceFiles: 'target/*.jar')], 
-                usePromotionTimestamp: false, 
-                useWorkspaceInPromotion: false, verbose: false)])
-                
+                echo 'Docker Image Push'
+                script {
+                    // cleanup current user docker credentials
+                    sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'                    
+                   
+                    docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
+                        docker.image("${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG}").push()
+                    }
+                }
+            }
+        }        
+        stage('Code Deploy') {
+            steps {
+                echo 'Code Deploy'  
             }
         }
     }
