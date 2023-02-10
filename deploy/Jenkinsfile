@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo 'Docker Image Build'
                 dir("${env.WORKSPACE}") {
-                    sh 'docker build -t spring-petclinic/spring-petclinic:1.0 .'
+                    sh 'docker build -t spring-petclinic:1.0 .'
                 }
             }
         }
